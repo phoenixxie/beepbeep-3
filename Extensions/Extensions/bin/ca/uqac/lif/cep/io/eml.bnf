@@ -1,0 +1,15 @@
+# -----------------------------------------
+# Grammar for BeepBeep 3; edit at your own risk!
+#
+# This is an EML (Event Manipulation Language) where events are
+# chunks from an input stream.
+# This grammar works in tandem with the EPL (Event Processing
+# Language) grammar.
+# -----------------------------------------
+
+<eml_expr>               := <p_reader> ;
+<p_reader>               := <p_stream> | <p_url> | <p_caller> ;
+<p_stream>               := FILE <stream_string> ;
+<p_url>                  := URL <stream_string> ;
+<p_caller>               := CALL <stream_string> ON ( <processor> ) ;
+<stream_string>          := ^".*?";
