@@ -1,5 +1,0 @@
-INDEX VERSION 1.126+/home/sylvain/Workspaces/beepbeep-3/Extensions/.metadata/.plugins/org.eclipse.jdt.core
-130301426.index
-3381942249.index
-1791611979.index
-1231289908.index
