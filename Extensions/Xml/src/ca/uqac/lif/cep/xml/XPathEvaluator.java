@@ -30,8 +30,10 @@ public class XPathEvaluator extends FunctionProcessor
 	{
 		super(new XPathFunction(exp));
 	}
-	
-	/**
+
+
+
+    /**
 	 * Function that converts a string into an XML element
 	 */
 	public static class XPathFunction extends UnaryFunction<XmlElement,Collection<XmlElement>> 

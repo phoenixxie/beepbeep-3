@@ -55,3 +55,5 @@ jacoco.exec
 
 # PDT-specific
 **/.buildpath
+
+*.iml

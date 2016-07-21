@@ -73,6 +73,7 @@ public class WindowFunction extends SingleProcessor
 	protected Queue<Object[]> compute(Object[] inputs) 
 	{
 		m_window.add(inputs[0]);
+
 		int size = m_window.size();
 		if (size == m_width + 1)
 		{
@@ -83,7 +84,8 @@ public class WindowFunction extends SingleProcessor
 		{
 			return wrapObject(m_function.evaluate(m_window.toArray())[0]);
 		}
-		return null;
+
+		return wrapObject(new Object());
 	}
 
 	@Override
