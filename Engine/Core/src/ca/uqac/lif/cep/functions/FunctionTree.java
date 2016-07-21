@@ -49,6 +49,25 @@ public class FunctionTree extends Function
 	}
 	
 	/**
+	 * Creates a new function tree, by specifying the root and
+	 * its immediate children
+	 * @param functions An array of functions. The first element
+	 *   of the array is the function to act as the root of the tree. The
+	 *   size of the array must be <i>n</i>+1, where <i>n</i> is the
+	 *   input arity of that function. The remaining elements of the
+	 *   array are the functions that will be the children of the root
+	 *   in the resulting tree.
+	 */
+	public FunctionTree(Function ... functions)
+	{
+		this(functions[0]);
+		for (int i = 1; i < functions.length; i++)
+		{
+			setChild(i - 1, functions[i]);
+		}
+	}
+	
+	/**
 	 * Sets the <i>i</i>-th child of the tree
 	 * @param index The index
 	 * @param f The function
@@ -133,5 +152,29 @@ public class FunctionTree extends Function
 	public Class<?> getOutputTypeFor(int index) 
 	{
 		return m_function.getOutputTypeFor(index);
+	}
+	
+	@Override
+	public String toString()
+	{
+		StringBuilder out = new StringBuilder();
+		if (m_children.length == 2)
+		{
+			out.append("[").append(m_children[0]).append("]").append(m_function).append("[").append(m_children[1]).append("]");
+		}
+		else
+		{
+			out.append(m_function).append("[");
+			for (int i = 0; i < m_children.length; i++)
+			{
+				if (i > 0)
+				{
+					out.append(",");
+				}
+				out.append(m_children[i]);
+			}
+			out.append("]");
+		}
+		return out.toString();
 	}
 }

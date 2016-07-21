@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2016 Sylvain Hall�
+    Copyright (C) 2008-2016 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -15,35 +15,38 @@
     You should have received a copy of the GNU Lesser General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ca.uqac.lif.cep.ltl;
+package ca.uqac.lif.cep.functions;
 
-import ca.uqac.lif.cep.Processor;
-import ca.uqac.lif.cep.functions.Function;
-import ca.uqac.lif.cep.ltl.Troolean.Value;
+import java.util.Collection;
 
-public class Exists extends FirstOrderQuantifier
+/**
+ * Checks for the equality of various data types
+ * @author Sylvain Hallé
+ */
+public class Equals extends BinaryFunction<Object,Object,Boolean>
 {
-	public Exists(String var_name, Function split_function, Processor p)
+	public static final transient Equals instance = new Equals();
+	
+	private Equals()
 	{
-		super(var_name, split_function, p);
+		super(Object.class, Object.class, Boolean.class);
 	}
 
 	@Override
-	public Object evaluate(Object[] values) 
+	public Boolean getValue(Object x, Object y) 
 	{
-		Value[] t_values = new Value[values.length];
-		for (int i = 0; i < values.length; i++)
+		if (x instanceof Collection && y instanceof Collection)
 		{
-			t_values[i] = Troolean.trooleanValue(values[i]);
+			Collection<?> set_x = (Collection<?>) x;
+			Collection<?> set_y = (Collection<?>) y;
+			return set_x.size() == set_y.size() && set_x.containsAll(set_y);
 		}
-		return Troolean.or(t_values);
+		return x.equals(y);
 	}
-
+	
 	@Override
-	public Processor clone() 
+	public String toString()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return "=";
 	}
-
 }

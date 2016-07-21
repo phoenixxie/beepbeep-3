@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2016 Sylvain Hall�
+    Copyright (C) 2008-2016 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -15,35 +15,29 @@
     You should have received a copy of the GNU Lesser General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ca.uqac.lif.cep.ltl;
+package ca.uqac.lif.cep.numbers;
 
-import ca.uqac.lif.cep.Processor;
-import ca.uqac.lif.cep.functions.Function;
-import ca.uqac.lif.cep.ltl.Troolean.Value;
+import ca.uqac.lif.cep.functions.UnaryFunction;
 
-public class Exists extends FirstOrderQuantifier
+/**
+ * Computes the absolute value of its argument
+ * @author Sylvain Hallé
+ */
+public class AbsoluteValue extends UnaryFunction<Number,Number> 
 {
-	public Exists(String var_name, Function split_function, Processor p)
+	/**
+	 * A static instance of absolute value
+	 */
+	public static final transient AbsoluteValue instance = new AbsoluteValue();
+	
+	private AbsoluteValue()
 	{
-		super(var_name, split_function, p);
+		super(Number.class, Number.class);
 	}
 
 	@Override
-	public Object evaluate(Object[] values) 
+	public Number getValue(Number x)
 	{
-		Value[] t_values = new Value[values.length];
-		for (int i = 0; i < values.length; i++)
-		{
-			t_values[i] = Troolean.trooleanValue(values[i]);
-		}
-		return Troolean.or(t_values);
+		return Math.abs(x.floatValue());
 	}
-
-	@Override
-	public Processor clone() 
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

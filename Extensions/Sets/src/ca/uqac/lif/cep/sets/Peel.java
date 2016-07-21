@@ -1,6 +1,6 @@
 /*
     BeepBeep, an event stream processor
-    Copyright (C) 2008-2016 Sylvain Hall�
+    Copyright (C) 2008-2016 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -15,35 +15,40 @@
     You should have received a copy of the GNU Lesser General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ca.uqac.lif.cep.ltl;
+package ca.uqac.lif.cep.sets;
 
-import ca.uqac.lif.cep.Processor;
-import ca.uqac.lif.cep.functions.Function;
-import ca.uqac.lif.cep.ltl.Troolean.Value;
+import java.util.Collection;
 
-public class Exists extends FirstOrderQuantifier
+import ca.uqac.lif.cep.functions.UnaryFunction;
+
+/**
+ * If the input is a singleton, extracts the element of that singleton.
+ * In all other cases, returns the input as is.
+ * @author Sylvain Hallé
+ */
+public class Peel extends UnaryFunction<Object,Object> 
 {
-	public Exists(String var_name, Function split_function, Processor p)
+	/**
+	 * An instance of the peel function
+	 */
+	public static final transient Peel instance = new Peel();
+	
+	private Peel()
 	{
-		super(var_name, split_function, p);
+		super(Object.class, Object.class);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
-	public Object evaluate(Object[] values) 
+	public Object getValue(Object x) 
 	{
-		Value[] t_values = new Value[values.length];
-		for (int i = 0; i < values.length; i++)
+		if (x instanceof Collection)
 		{
-			t_values[i] = Troolean.trooleanValue(values[i]);
+			for (Object o : (Collection) x)
+			{
+				return o;
+			}
 		}
-		return Troolean.or(t_values);
+		return x;
 	}
-
-	@Override
-	public Processor clone() 
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }
