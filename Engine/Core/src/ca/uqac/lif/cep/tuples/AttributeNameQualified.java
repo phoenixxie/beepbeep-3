@@ -17,6 +17,8 @@
  */
 package ca.uqac.lif.cep.tuples;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 import ca.uqac.lif.cep.Connector.ConnectorException;
@@ -87,6 +89,30 @@ public class AttributeNameQualified extends AttributeName
 		{
 			NamedTupleMap nt = (NamedTupleMap) relevant_tuple;
 			return nt.get(m_attributeName);
+		}
+		else if (relevant_tuple instanceof List && !((List)relevant_tuple).isEmpty() && ((List)relevant_tuple).get(0) instanceof NamedTupleFixed) {
+			List<Object> result = new ArrayList<>();
+			List<NamedTupleFixed> list = (List<NamedTupleFixed>)relevant_tuple;
+
+			for (NamedTupleFixed ntf : list) {
+				if (m_attributeIndex < 0)
+				{
+					m_attributeIndex = ntf.getIndexOf(m_attributeName);
+				}
+				result.add(ntf.getValue(m_attributeIndex));
+			}
+
+			return result;
+		}
+		else if (relevant_tuple instanceof List && !((List)relevant_tuple).isEmpty() && ((List)relevant_tuple).get(0) instanceof NamedTuple) {
+			List<Object> result = new ArrayList<>();
+			List<NamedTuple> list = (List<NamedTuple>)relevant_tuple;
+
+			for (NamedTuple nt : list) {
+				result.add(nt.get(m_attributeName));
+			}
+
+			return result;
 		}
 		else
 		{

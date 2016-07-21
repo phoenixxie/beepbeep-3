@@ -28,8 +28,7 @@ public class PinguSpontaneousCreation {
         XmlFeeder feeder = new XmlFeeder();
         XPathEvaluator xpath = new XPathEvaluator(XPathExpression.parse("characters/character/id"));
         WindowFunction wf = new WindowFunction(IsSupersetOrEqual.instance);
-        ToStringHashSet tshs = new ToStringHashSet();
-        Connector.connect(reader, feeder, xpath, tshs, wf);
+        Connector.connect(reader, feeder, xpath, wf);
 
         Pullable p = wf.getPullableOutput(0);
 

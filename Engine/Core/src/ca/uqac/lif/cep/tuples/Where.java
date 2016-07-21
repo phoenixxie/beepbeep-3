@@ -17,9 +17,7 @@
  */
 package ca.uqac.lif.cep.tuples;
 
-import java.util.ArrayDeque;
-import java.util.Queue;
-import java.util.Stack;
+import java.util.*;
 
 import ca.uqac.lif.cep.Connector;
 import ca.uqac.lif.cep.Connector.ConnectorException;
@@ -46,18 +44,32 @@ public class Where extends SingleProcessor
 	{
 		Queue<Object[]> out_q = new ArrayDeque<Object[]>();
 		Object first_elem = inputs[0];
-		if (!(first_elem instanceof Tuple))
+		if (first_elem instanceof Tuple == false && first_elem instanceof List == false && ((List)first_elem).get(0) instanceof Tuple)
 		{
 			// The WHERE processor should receive only tuples
 			return null;
 		}
-		Tuple in_tuple = (Tuple) first_elem;
-		m_associations.putAt(0, in_tuple);
-		Object result = m_filterExpression.evaluate(m_associations);
-		if (EmlBoolean.parseBoolValue(result) == true)
-		{
+
+		if (first_elem instanceof Tuple) {
+			Tuple in_tuple = (Tuple) first_elem;
+			m_associations.putAt(0, in_tuple);
+			Object result = m_filterExpression.evaluate(m_associations);
+			if (EmlBoolean.parseBoolValue(result) == true) {
+				Object[] v_o = new Object[1];
+				v_o[0] = in_tuple;
+				out_q.add(v_o);
+			}
+		} else {
+			List<Tuple> list = new ArrayList<>();
+			for (Tuple tuple : (List<Tuple>)first_elem) {
+				m_associations.putAt(0, tuple);
+				Object result = m_filterExpression.evaluate(m_associations);
+				if (EmlBoolean.parseBoolValue(result) == true) {
+					list.add(tuple);
+				}
+			}
 			Object[] v_o = new Object[1];
-			v_o[0] =  in_tuple;
+			v_o[0] = list;
 			out_q.add(v_o);
 		}
 		return out_q;
